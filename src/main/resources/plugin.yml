@@ -13,3 +13,11 @@ commands:
     description: Teleporta você para o spawn do servidor
     usage: /spawn
     permission: m4utils.spawn
+  modo:
+    description: Abre um menu para selecionar o modo de jogo
+    usage: /modo
+    permission: m4utils.modo
+  rtp:
+    description: Teleporta aleatoriamente para algum lugar seguro
+    usage: /rtp
+    permission: m4utils.rtp

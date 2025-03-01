@@ -3,6 +3,7 @@ package me.m4nst3in.m4Utils.commands;
 import me.m4nst3in.m4Utils.Main;
 import me.m4nst3in.m4Utils.util.CombatTracker;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -51,6 +52,9 @@ public class SpawnCommand implements CommandExecutor {
 
         player.sendMessage(Main.colorize("&aTeleportando para o spawn em 5 segundos. Não se mova!"));
 
+        // Play initial sound
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
+
         // Schedule teleport after delay
         BukkitTask task = new BukkitRunnable() {
             int seconds = 5;
@@ -60,6 +64,7 @@ public class SpawnCommand implements CommandExecutor {
                 // Check if player moved
                 if (!player.isOnline() || !locationEquals(initialLocation, player.getLocation())) {
                     player.sendMessage(Main.colorize("&cTeleporte cancelado! Você se moveu."));
+                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
                     pendingTeleports.remove(player.getUniqueId());
                     this.cancel();
                     return;
@@ -68,6 +73,9 @@ public class SpawnCommand implements CommandExecutor {
                 if (seconds <= 0) {
                     // Teleport player
                     player.teleport(player.getWorld().getSpawnLocation());
+
+                    // Play teleport sound
+                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
 
                     // Show title
                     player.sendTitle(
@@ -78,6 +86,9 @@ public class SpawnCommand implements CommandExecutor {
                     pendingTeleports.remove(player.getUniqueId());
                     this.cancel();
                 } else {
+                    // Play countdown sound
+                    player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
+
                     player.sendMessage(Main.colorize("&aTeleportando em " + seconds + " segundo(s)..."));
                     seconds--;
                 }

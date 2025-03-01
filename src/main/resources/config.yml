@@ -3,10 +3,32 @@
 # MOTD Settings
 motd:
   # First line of the MOTD
-  line1: "&5&lPlatform Destroyer &f&l- &5&lSURVIVAL ABERTO!"
+  line1: "&5&lPlatform Destroyer &f&l- &e&lSURVIVAL ABERTO!"
 
   # Second line of the MOTD
-  line2: "&f✦ &5Venha se juntar à nossa comunidade! &f✦"
+  line2: "&f✦ &fVenha se juntar à nossa comunidade! &f✦"
+
+# Tab Settings
+tab:
+  header: |-
+    &6&l====================
+    &b&lPlatform Destroyer
+    &7Bem-vindo ao servidor!
+    &6&l====================
+  footer: |-
+    &6&l====================
+    &ePD.servidor.net
+    &6&l====================
+  player-format: "&8[&r%prefix%&8] &f%player_name%"
+  update-interval: 20
+
+  messages:
+    join: "&e%player% joined the game"
+    quit: "&e%player% left the game"
+
+  rtp:
+    max-radius: 10000
+    cooldown-seconds: 300
 
 # Note: Use '&' for color codes:
 # &0: Black        &1: Dark Blue    &2: Dark Green   &3: Dark Aqua

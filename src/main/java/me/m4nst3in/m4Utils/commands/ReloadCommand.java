@@ -19,6 +19,7 @@ public class ReloadCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         configManager.loadConfig();
+        ((Main)plugin).getTabManager().reload();
         sender.sendMessage(Main.colorize("&aM4Utils configuration reloaded!"));
         return true;
     }
