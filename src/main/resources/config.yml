@@ -1,0 +1,17 @@
+# M4Utils MOTD Configuration
+
+# MOTD Settings
+motd:
+  # First line of the MOTD
+  line1: "&6&l✦ &b&l✦ &e&lM4nSt3in Server &b&l✦ &6&l✦"
+
+  # Second line of the MOTD
+  line2: "&a&l➤ &d&oJoin now and have fun with us! &a&l⬅"
+
+# Note: Use '&' for color codes:
+# &0: Black        &1: Dark Blue    &2: Dark Green   &3: Dark Aqua
+# &4: Dark Red     &5: Dark Purple  &6: Gold         &7: Gray
+# &8: Dark Gray    &9: Blue         &a: Green        &b: Aqua
+# &c: Red          &d: Light Purple &e: Yellow       &f: White
+# &k: Magic        &l: Bold         &m: Strikethrough
+# &n: Underline    &o: Italic       &r: Reset

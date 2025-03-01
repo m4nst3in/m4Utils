@@ -1,0 +1,6 @@
+name: M4Utils
+version: '1.0'
+main: me.m4nst3in.m4Utils.Main
+api-version: '1.21' # Use the closest available API version
+description: A plugin that customizes server MOTD and icon
+author: M4nSt3in
