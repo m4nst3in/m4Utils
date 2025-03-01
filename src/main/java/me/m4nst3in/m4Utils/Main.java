@@ -1,74 +1,39 @@
 package me.m4nst3in.m4Utils;
 
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.ServerListPingEvent;
+import me.m4nst3in.m4Utils.commands.SpawnCommand;
+import me.m4nst3in.m4Utils.config.ConfigManager;
+import me.m4nst3in.m4Utils.listeners.JoinTitleManager;
+import me.m4nst3in.m4Utils.listeners.MOTDManager;
+import me.m4nst3in.m4Utils.commands.ReloadCommand;
+import me.m4nst3in.m4Utils.util.CombatTracker;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.CachedServerIcon;
 
-import java.io.File;
-
-public final class Main extends JavaPlugin implements Listener {
-
-    private CachedServerIcon serverIcon;
-    private String motdLine1;
-    private String motdLine2;
+public final class Main extends JavaPlugin {
+    private ConfigManager configManager;
 
     @Override
     public void onEnable() {
-        // Save default config if it doesn't exist
-        saveDefaultConfig();
+        configManager = new ConfigManager(this);
+        configManager.loadConfig();
 
-        // Load configuration
-        loadConfig();
+        // Create combat tracker
+        CombatTracker combatTracker = new CombatTracker(this);
 
-        // Register event listener
-        getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new MOTDManager(this, configManager), this);
+        getServer().getPluginManager().registerEvents(new JoinTitleManager(this), this);
 
-        // Log successful startup
-        getLogger().info("M4Utils MOTD plugin enabled successfully!");
+        getCommand("m4reload").setExecutor(new ReloadCommand(this, configManager));
+        getCommand("spawn").setExecutor(new SpawnCommand(this, combatTracker));
+
+        getLogger().info("M4Utils plugin enabled successfully!");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("M4Utils MOTD plugin disabled.");
+        getLogger().info("M4Utils plugin disabled.");
     }
 
-    private void loadConfig() {
-        // Reload config to get fresh values
-        reloadConfig();
-        FileConfiguration config = getConfig();
-
-        // Load MOTD lines from config
-        motdLine1 = config.getString("motd.line1", "&6Welcome to the server!");
-        motdLine2 = config.getString("motd.line2", "&eHave a great time!");
-
-        // Load server icon
-        try {
-            File iconFile = new File(getDataFolder(), "server-icon.png");
-            if (iconFile.exists()) {
-                serverIcon = Bukkit.loadServerIcon(iconFile);
-                getLogger().info("Server icon loaded successfully.");
-            } else {
-                getLogger().warning("server-icon.png not found in plugin folder.");
-            }
-        } catch (Exception e) {
-            getLogger().warning("Failed to load server icon: " + e.getMessage());
-        }
-    }
-
-    @EventHandler
-    public void onServerPing(ServerListPingEvent event) {
-        event.setMotd(colorize(motdLine1 + "\n" + motdLine2));
-
-        if (serverIcon != null) {
-            event.setServerIcon(serverIcon);
-        }
-    }
-
-    private String colorize(String message) {
+    public static String colorize(String message) {
         return message.replace("&", "§");
     }
 }

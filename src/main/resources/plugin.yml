@@ -1,6 +1,15 @@
 name: M4Utils
 version: '1.0'
 main: me.m4nst3in.m4Utils.Main
-api-version: '1.21' # Use the closest available API version
+api-version: '1.21'
 description: A plugin that customizes server MOTD and icon
 author: M4nSt3in
+commands:
+  m4reload:
+    description: Reloads the M4Utils configuration
+    usage: /m4reload
+    permission: m4utils.reload
+  spawn:
+    description: Teleporta você para o spawn do servidor
+    usage: /spawn
+    permission: m4utils.spawn

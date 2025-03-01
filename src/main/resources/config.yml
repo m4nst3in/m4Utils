@@ -3,10 +3,10 @@
 # MOTD Settings
 motd:
   # First line of the MOTD
-  line1: "&6&l✦ &b&l✦ &e&lM4nSt3in Server &b&l✦ &6&l✦"
+  line1: "&5&lPlatform Destroyer &f&l- &5&lSURVIVAL ABERTO!"
 
   # Second line of the MOTD
-  line2: "&a&l➤ &d&oJoin now and have fun with us! &a&l⬅"
+  line2: "&f✦ &5Venha se juntar à nossa comunidade! &f✦"
 
 # Note: Use '&' for color codes:
 # &0: Black        &1: Dark Blue    &2: Dark Green   &3: Dark Aqua
