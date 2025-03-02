@@ -46,8 +46,8 @@ public class TabManager {
 
     private void loadConfig() {
         header = plugin.getConfig().getString("tab.header", "&6&lPlatform Destroyer\n&7Bem-vindo ao servidor!");
-        footer = plugin.getConfig().getString("tab.footer", "\n&ePD.servidor.net");
-        playerFormat = plugin.getConfig().getString("tab.player-format", "&8[&r%prefix%&8] ");
+        footer = plugin.getConfig().getString("tab.footer", "\n&eplatformdestroyer.me");
+        playerFormat = plugin.getConfig().getString("tab.player-format", "&r%prefix%&r");
         updateInterval = plugin.getConfig().getInt("tab.update-interval", 20);
     }
 

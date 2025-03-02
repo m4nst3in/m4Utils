@@ -21,3 +21,8 @@ commands:
     description: Teleporta aleatoriamente para algum lugar seguro
     usage: /rtp
     permission: m4utils.rtp
+  home:
+    description: Gerencia suas homes (criar, listar, teleportar)
+    usage: /home [create|delete|tp|list|manage] [nome]
+    permission: m4utils.home
+    aliases: [homes, h]

@@ -19,7 +19,7 @@ tab:
     &6&l====================
     &ePD.servidor.net
     &6&l====================
-  player-format: "&8[&r%prefix%&8] &f%player_name%"
+  player-format: "&r%prefix%&r"
   update-interval: 20
 
   messages:

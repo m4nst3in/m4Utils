@@ -1,0 +1,28 @@
+# Permissões do sistema de homes
+m4utils.home:
+  description: Permite usar o sistema básico de homes
+  default: true
+
+m4utils.homes.1:
+  description: Permite ter 1 home
+  default: true
+
+m4utils.homes.2:
+  description: Permite ter 2 homes
+  default: true
+
+m4utils.homes.3:
+  description: Permite ter 3 homes
+  default: true
+
+m4utils.homes.5:
+  description: Permite ter 5 homes (VIP)
+  default: op
+
+m4utils.homes.10:
+  description: Permite ter 10 homes (VIP+)
+  default: op
+
+m4utils.homes.unlimited:
+  description: Permite ter homes ilimitadas (apenas para staff)
+  default: op
