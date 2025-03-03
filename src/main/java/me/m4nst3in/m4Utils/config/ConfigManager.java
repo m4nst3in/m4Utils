@@ -5,8 +5,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.CachedServerIcon;
 
-import java.io.File;
-
 public class ConfigManager {
     private final JavaPlugin plugin;
     private CachedServerIcon serverIcon;
@@ -25,17 +23,6 @@ public class ConfigManager {
         motdLine1 = config.getString("motd.line1", "&5&lPlatform Destroyer &f&l- &5&lSURVIVAL ABERTO!");
         motdLine2 = config.getString("motd.line2", "&f✦ &5Venha se juntar à nossa comunidade! &f✦");
 
-        try {
-            File iconFile = new File(plugin.getDataFolder(), "server-icon.png");
-            if (iconFile.exists()) {
-                serverIcon = Bukkit.loadServerIcon(iconFile);
-                plugin.getLogger().info("Server icon loaded successfully.");
-            } else {
-                plugin.getLogger().warning("server-icon.png not found in plugin folder.");
-            }
-        } catch (Exception e) {
-            plugin.getLogger().warning("Failed to load server icon: " + e.getMessage());
-        }
     }
 
     public CachedServerIcon getServerIcon() {

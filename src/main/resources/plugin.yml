@@ -4,6 +4,7 @@ main: me.m4nst3in.m4Utils.Main
 api-version: '1.21'
 description: A plugin that customizes server MOTD and icon
 author: M4nSt3in
+depend: [LuckPerms, PlaceholderAPI]
 commands:
   m4reload:
     description: Reloads the M4Utils configuration
@@ -26,3 +27,15 @@ commands:
     usage: /home [create|delete|tp|list|manage] [nome]
     permission: m4utils.home
     aliases: [homes, h]
+  afk:
+    description: Ativa/desativa o modo afk.
+    usage: /afk
+    permission: m4utils.afk
+  warp:
+    description: Permite teletransportar para locais comuns do servidor.
+    usage: /warp
+    permission: m4utils.warp
+  scoreboard:
+    description: Gerencia o sistema de scoreboard
+    aliases: [sb]
+    usage: /scoreboard <on|off|reload> [tipo]

@@ -11,6 +11,8 @@ repositories {
         name = "papermc-repo"
         url = "https://repo.papermc.io/repository/maven-public/"
     }
+
+    maven { url = "https://repo.extendedclip.com/content/repositories/placeholderapi/" }
     maven { url = 'https://repo.lucko.me/' }
     maven {
         name = "sonatype"
@@ -21,6 +23,8 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     compileOnly 'net.luckperms:api:5.4'
+    compileOnly 'me.clip:placeholderapi:2.11.5'
+
 }
 
 def targetJavaVersion = 21
