@@ -1,7 +1,5 @@
 package me.m4nst3in.m4Utils;
 
-import me.m4nst3in.m4Utils.scoreboard.ScoreboardManager;
-import me.m4nst3in.m4Utils.commands.ScoreboardCommand;
 import me.m4nst3in.m4Utils.commands.*;
 import me.m4nst3in.m4Utils.config.ConfigManager;
 import me.m4nst3in.m4Utils.gui.HomeGUIManager;
@@ -13,8 +11,6 @@ import me.m4nst3in.m4Utils.util.CombatTracker;
 import me.m4nst3in.m4Utils.warp.WarpManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,7 +20,6 @@ public final class Main extends JavaPlugin {
     private HomeManager homeManager;
     private AFKManager afkManager;
     private WarpManager warpManager;
-    private ScoreboardManager scoreboardManager;
 
 
     @Override
@@ -43,23 +38,14 @@ public final class Main extends JavaPlugin {
         homeManager = new HomeManager(this);
         afkManager = new AFKManager(this);
         warpManager = new WarpManager(this);
-        scoreboardManager = new ScoreboardManager(this);
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            scoreboardManager.setScoreboard(player, "padrao");
-        }
-
-
 
         // Chat Listener
         WarpChatListener warpChatListener = new WarpChatListener(this, warpManager);
-
 
         // Initialize GUI managers
         HomeGUIManager homeGUIManager = new HomeGUIManager(this, homeManager);
         WarpGUIManager warpGUIManager = new WarpGUIManager(this, warpManager);
         warpGUIManager.setChatListener(warpChatListener);
-
 
         // Register event listeners
         getServer().getPluginManager().registerEvents(new MOTDManager(this, configManager), this);
@@ -68,17 +54,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AFKListener(afkManager), this);
         getServer().getPluginManager().registerEvents(warpChatListener, this);
         getServer().getPluginManager().registerEvents(new WarpMenuListener(this, warpManager, warpGUIManager), this);
-
         getServer().getPluginManager().registerEvents(new Listener() {
-            @EventHandler
-            public void onPlayerJoin(PlayerJoinEvent event) {
-                scoreboardManager.setScoreboard(event.getPlayer(), "padrao");
-            }
-
-            @EventHandler
-            public void onPlayerQuit(PlayerQuitEvent event) {
-                scoreboardManager.onPlayerQuit(event.getPlayer());
-            }
         }, this);
 
         // Register commands
@@ -89,8 +65,7 @@ public final class Main extends JavaPlugin {
         getCommand("home").setExecutor(new HomeCommand(this, homeManager, homeGUIManager, combatTracker));
         getCommand("afk").setExecutor(new AFKCommand(afkManager));
         getCommand("warp").setExecutor(new WarpCommand(this, warpManager, warpGUIManager));
-        getCommand("scoreboard").setExecutor(new ScoreboardCommand(this, scoreboardManager));
-
+        // Registra o comando do TabList
         getLogger().info("M4Utils plugin enabled successfully!");
     }
 

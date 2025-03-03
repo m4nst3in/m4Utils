@@ -39,3 +39,9 @@ commands:
     description: Gerencia o sistema de scoreboard
     aliases: [sb]
     usage: /scoreboard <on|off|reload> [tipo]
+  tablist:
+    description: Gerencia o sistema de tablist
+    aliases: [tl]
+    usage: /tablist <reload|on|off>
+    permission: m4utils.tablist
+
