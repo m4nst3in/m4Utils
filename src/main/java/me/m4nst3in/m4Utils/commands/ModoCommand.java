@@ -33,6 +33,26 @@ public class ModoCommand implements CommandExecutor, Listener {
         }
 
         Player player = (Player) sender;
+
+        // If arguments are provided, try to change mode directly
+        if (args.length > 0) {
+            String modeArg = args[0].toLowerCase();
+
+            if (modeArg.startsWith("s")) {
+                changeGameMode(player, GameMode.SURVIVAL, "§c§lSURVIVAL");
+            } else if (modeArg.startsWith("c")) {
+                changeGameMode(player, GameMode.CREATIVE, "§b§lCRIATIVO");
+            } else if (modeArg.startsWith("a")) {
+                changeGameMode(player, GameMode.ADVENTURE, "§8§lAVENTURE");
+            } else {
+                player.sendMessage(Main.colorize("&cModo inválido! Use: survival, creative ou adventure"));
+                return true;
+            }
+
+            return true;
+        }
+
+        // No arguments provided, open GUI
         openModeGUI(player);
         return true;
     }

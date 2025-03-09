@@ -10,6 +10,10 @@ commands:
     description: Reloads the M4Utils configuration
     usage: /m4reload
     permission: m4utils.reload
+  setspawn:
+    description: Define o spawn do servidor
+    usage: /setspawn
+    permission: m4utils.setspawn
   spawn:
     description: Teleporta você para o spawn do servidor
     usage: /spawn
@@ -18,6 +22,7 @@ commands:
     description: Abre um menu para selecionar o modo de jogo
     usage: /modo
     permission: m4utils.modo
+    aliases: [gamemode, gm]
   rtp:
     description: Teleporta aleatoriamente para algum lugar seguro
     usage: /rtp
@@ -44,4 +49,99 @@ commands:
     aliases: [tl]
     usage: /tablist <reload|on|off>
     permission: m4utils.tablist
-
+  tp:
+    description: Teleporta um jogador para outro jogador
+    usage: /tp <jogador>
+    permission: m4utils.tp
+  tpa:
+    description: Envia um pedido de teletransporte para outro jogador
+    usage: /tpa <jogador>
+    permission: m4utils.tpa
+  tpahere:
+    description: Envia um pedido de teletransporte para outro jogador
+    usage: /tpahere <jogador>
+    permission: m4utils.tpahere
+  tpdeny:
+    description: Recusa um pedido de teletransporte
+    usage: /tpdeny
+    permission: m4utils.tpdeny
+  tpaccept:
+    description: Aceita um pedido de teletransporte
+    usage: /tpaccept
+    permission: m4utils.tpaccept
+  tptoggle:
+    description: Ativa ou desativa o recebimento de pedidos de teletransporte
+    usage: /tptoggle
+    permission: m4utils.tptoggle
+  weather:
+    description: Altera o clima do servidor
+    usage: /weather <sol|chuva|tempestade> [duracao]
+    permission: m4utils.weather
+  time:
+    description: Altera o tempo do servidor
+    usage: /time <dia|noite|manhã|tarde|ticks>
+    permission: m4utils.time
+  heal:
+    description: Cura o jogador
+    usage: /heal
+    permission: m4utils.heal
+  fly:
+    description: Ativa o modo de voo
+    usage: /fly
+    permission: m4utils.fly
+  clear:
+    description: Limpa o inventário de um jogador
+    usage: /clear [jogador]
+    aliases: [ci, clearinv]
+    permission: m4utils.clear
+  vanish:
+    description: Torna o jogador invisível para outros jogadores
+    usage: /vanish
+    aliases: [v]
+    permission: m4utils.vanish
+  god:
+    description: Ativa o modo invencível
+    usage: /god [jogador]
+    permission: m4utils.god
+  invsee:
+    description: Vê o inventário de outro jogador
+    usage: /invsee <jogador>
+    permission: m4utils.invsee
+  enderchest:
+    description: Abre o enderchest de um jogador
+    usage: /enderchest [jogador]
+    aliases: [ec, echest]
+    permission: m4utils.enderchest
+  speed:
+    description: Altera a velocidade de movimento
+    usage: /speed <0-10> [jogador]
+    permission: m4utils.speed
+  broadcast:
+    description: Envia uma mensagem global para o servidor
+    usage: /broadcast <mensagem>
+    aliases: [bc, anuncio]
+    permission: m4utils.broadcast
+  skull:
+    description: Obtém a cabeça de um jogador
+    usage: /skull <jogador>
+    aliases: [head, cabeca]
+    permission: m4utils.skull
+  ping:
+    description: Mostra seu ping ou o ping de outro jogador
+    usage: /ping [jogador]
+    permission: m4utils.ping
+  hat:
+    description: Coloca o item da sua mão na sua cabeça
+    usage: /hat
+    aliases: [ chapeu ]
+    permission: m4utils.hat
+  back:
+    description: Teleporta para sua localização anterior
+    usage: /back
+    aliases: [ return, voltar ]
+    permission: m4utils.back
+  coords:
+    description: Mostra suas coordenadas atuais
+    usage: /coords [share]
+    aliases: [ pos, location, loc, coordenadas ]
+    permission: m4utils.coords

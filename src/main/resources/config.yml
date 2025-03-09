@@ -18,6 +18,106 @@ rtp:
   max-radius: 10000
   cooldown-seconds: 300
 
+prefix:
+  enabled: true
+  # Format supports:
+  # {decoration_left} - Left decoration based on player group
+  # {group_prefix} - Player's group prefix from LuckPerms
+  # {decoration_right} - Right decoration based on player group
+  # {player_name} - Player's name
+  # {player_name_color} - Color for player name
+  # Any PlaceholderAPI placeholder like %vault_prefix%, %luckperms_suffix%, etc.
+  format: '{decoration_left} {group_prefix} {player_name_color}{player_name}    {clan_tag} {decoration_right}'
+
+  # Unicode Decorations by group - Use placeholders like {STAR}, {CROWN}, etc.
+  # See UnicodeUtils class for all available options
+  decorations:
+    default:
+      left: '{DIAMOND}'
+      right: '{DIAMOND}'
+    admin:
+      left: '{CROWN}'
+      right: '{CROWN}'
+    mod:
+      left: '{SHIELD}'
+      right: '{SHIELD}'
+    vip:
+      left: '{STAR}'
+      right: '{STAR}'
+    mvp:
+      left: '{SPARKLES}'
+      right: '{SPARKLES}'
+    donor:
+      left: '{HEART}'
+      right: '{HEART}'
+    builder:
+      left: '{SQUARE}'
+      right: '{SQUARE}'
+    youtuber:
+      left: '{NOTE}'
+      right: '{NOTE}'
+
+  # Colors by group - customize prefix color and player name color
+  colors:
+    default:
+      prefix: '&7'
+      name: '&f'
+    admin:
+      prefix: '&c'
+      name: '&f'
+    mod:
+      prefix: '&2'
+      name: '&f'
+    vip:
+      prefix: '&6'
+      name: '&e'
+    mvp:
+      prefix: '&b'
+      name: '&f'
+    donor:
+      prefix: '&d'
+      name: '&f'
+    builder:
+      prefix: '&3'
+      name: '&b'
+    youtuber:
+      prefix: '&c'
+      name: '&f'
+
+  # Custom placeholders to use in the format - add any PlaceholderAPI placeholder
+  custom_placeholders:
+    enabled: true
+    placeholders:
+      # LuckPerms placeholders
+      - "%luckperms_suffix%"
+      - "%luckperms_meta_rank_ladder%"
+
+      # Vault placeholders
+      - "%vault_prefix%"
+      - "%vault_suffix%"
+      - "%vault_rankprefix%"
+
+      # Player placeholders
+      - "%player_health%"
+      - "%player_food_level%"
+      - "%player_displayname%"
+      - "%player_world%"
+
+      # Server placeholders
+      - "%server_online%"
+      - "%server_ram_used%"
+
+      - "%clan_tag%"
+
+      # Other plugin placeholders - add any from your installed plugins
+      # Examples (these will only work if you have these plugins):
+      - "%townyadvanced_town%"
+      - "%factions_faction_name%"
+      - "%mcmmo_power_level%"
+      - "%bungeeperms_display_group%"
+      - "%griefdefender_claim_name%"
+      - "%bedwars_stats_kills%"
+      - "%ultimatelevels_level%"
 # Note: Use '&' for color codes:
 # &0: Black        &1: Dark Blue    &2: Dark Green   &3: Dark Aqua
 # &4: Dark Red     &5: Dark Purple  &6: Gold         &7: Gray

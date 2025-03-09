@@ -72,8 +72,7 @@ public class SpawnCommand implements CommandExecutor {
 
                 if (seconds <= 0) {
                     // Teleport player
-                    player.teleport(player.getWorld().getSpawnLocation());
-
+                    player.teleport(getSpawnLocation());
                     // Play teleport sound
                     player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
 
@@ -97,6 +96,25 @@ public class SpawnCommand implements CommandExecutor {
 
         pendingTeleports.put(player.getUniqueId(), task);
         return true;
+    }
+
+    private Location getSpawnLocation() {
+        if (plugin.getConfig().contains("spawn.world")) {
+            String worldName = plugin.getConfig().getString("spawn.world");
+            double x = plugin.getConfig().getDouble("spawn.x");
+            double y = plugin.getConfig().getDouble("spawn.y");
+            double z = plugin.getConfig().getDouble("spawn.z");
+            float yaw = (float) plugin.getConfig().getDouble("spawn.yaw");
+            float pitch = (float) plugin.getConfig().getDouble("spawn.pitch");
+
+            org.bukkit.World world = plugin.getServer().getWorld(worldName);
+            if (world != null) {
+                return new Location(world, x, y, z, yaw, pitch);
+            }
+        }
+
+        // Fallback to default world spawn if custom spawn not set
+        return plugin.getServer().getWorlds().get(0).getSpawnLocation();
     }
 
     // Helper method to compare locations (ignoring pitch and yaw)
