@@ -31,7 +31,6 @@ public class VanishCommand implements CommandExecutor {
         boolean isVanished = player.hasMetadata("vanished") && player.getMetadata("vanished").get(0).asBoolean();
 
         if (isVanished) {
-            // Tornar visível
             player.removeMetadata("vanished", plugin);
 
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
@@ -40,7 +39,6 @@ public class VanishCommand implements CommandExecutor {
 
             player.sendMessage(Main.colorize("&cVanish desativado. Você agora está visível!"));
         } else {
-            // Tornar invisível
             player.setMetadata("vanished", new FixedMetadataValue(plugin, true));
 
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {

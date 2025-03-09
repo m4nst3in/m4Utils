@@ -21,7 +21,6 @@ public class CustomMessagesListener implements Listener {
     private final Set<String> recentlyProcessedAdvancements = new HashSet<>();
 
 
-    // Mensagens de morte
     private static final String DEATH_UNKNOWN = "&c{player} &7morreu de forma misteriosa";
     private static final String DEATH_ATTACK = "&c{player} &7foi morto";
     private static final String DEATH_BY_PLAYER = "&c{player} &7foi morto por &c{killer}";
@@ -43,14 +42,12 @@ public class CustomMessagesListener implements Listener {
     private static final String DEATH_THORNS = "&c{player} &7morreu pelos espinhos";
     private static final String DEATH_WITHER = "&c{player} &7morreu pelo efeito wither";
 
-    // Outras mensagens
     private static final String ADVANCEMENT = "&e{player} &7completou a conquista &6[{advancement}]&7!";
     private static final String LEVEL_UP = "&e{player} &7subiu para o nível &a{level}&7!";
     private static final String KICK = "&c{player} &7foi expulso do servidor!";
     private static final String JOIN = "&a{player} &eentrou no servidor";
     private static final String QUIT = "&c{player} &esaiu do servidor";
 
-    // Novas mensagens
     private static final String FIRST_JOIN = "&e>> &a{player} &eentrou no servidor pela primeira vez! &6Bem-vindo(a)!";
     private static final String GAMEMODE_CHANGE = "&e{player} &7mudou seu modo de jogo para &e{gamemode}";
     private static final String SLEEP = "&e{player} &7foi dormir. &e{sleeping}&7/&e{needed} &7jogadores dormindo";
@@ -68,10 +65,8 @@ public class CustomMessagesListener implements Listener {
         String cause = getDeathCause(player);
         String killerName = getKillerName(player);
 
-        // Cancela a mensagem padrão
         event.setDeathMessage(null);
 
-        // Formata e envia nossa própria mensagem
         String message;
         if (killerName != null) {
             message = Main.colorize(DEATH_BY_PLAYER.replace("{player}", player.getName()).replace("{killer}", killerName));
@@ -108,31 +103,22 @@ public class CustomMessagesListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerAdvancement(PlayerAdvancementDoneEvent event) {
-        // Get advancement key
         String key = event.getAdvancement().getKey().toString();
-
-        // Skip recipe advancements or non-notifiable advancements
         if (key.startsWith("minecraft:recipes/") || !key.contains(":")) {
             return;
         }
-
-        // Create unique identifier for this player+advancement
         String uniqueId = event.getPlayer().getUniqueId() + ":" + key;
 
-        // Check if we've already processed this advancement recently
         if (recentlyProcessedAdvancements.contains(uniqueId)) {
             return;
         }
 
-        // Add to tracking set
         recentlyProcessedAdvancements.add(uniqueId);
 
-        // Clean up the tracking set after a delay
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             recentlyProcessedAdvancements.remove(uniqueId);
         }, 20L);
 
-        // Send our custom message without modifying the advancement
         String message = Main.colorize(ADVANCEMENT
                 .replace("{player}", event.getPlayer().getName())
                 .replace("{advancement}", getAdvancementName(key)));
@@ -188,7 +174,6 @@ public class CustomMessagesListener implements Listener {
             String message = Main.colorize(GAMEMODE_CHANGE
                     .replace("{player}", player.getName())
                     .replace("{gamemode}", event.getNewGameMode().toString().toLowerCase()));
-            // Send only to the player who changed gamemode
             player.sendMessage(message);
         }
     }
@@ -215,7 +200,6 @@ public class CustomMessagesListener implements Listener {
     public void onBedLeave(PlayerBedLeaveEvent event) {
         Player player = event.getPlayer();
         String message = Main.colorize(WAKE_UP.replace("{player}", player.getName()));
-        // Send only to the player who woke up
         player.sendMessage(message);
     }
 
@@ -225,7 +209,6 @@ public class CustomMessagesListener implements Listener {
         String message = Main.colorize(WORLD_CHANGE
                 .replace("{player}", player.getName())
                 .replace("{world}", player.getWorld().getName()));
-        // Send only to the player who changed worlds
         player.sendMessage(message);
     }
 
@@ -239,7 +222,6 @@ public class CustomMessagesListener implements Listener {
     }
 
     private String formatTime(long time) {
-        // Convert ticks to a readable time format
         long hours = (time / 1000 + 6) % 24;
         long minutes = (time % 1000) * 60 / 1000;
         return String.format("%02d:%02d", hours, minutes);

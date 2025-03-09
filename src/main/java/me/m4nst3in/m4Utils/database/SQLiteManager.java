@@ -18,9 +18,6 @@ public class SQLiteManager {
         this.plugin = plugin;
     }
 
-    /**
-     * Inicializa a conexão com o banco de dados SQLite e cria as tabelas necessárias
-     */
     public void initialize() {
         File dataFolder = plugin.getDataFolder();
         if (!dataFolder.exists()) {
@@ -30,13 +27,9 @@ public class SQLiteManager {
         File dbFile = new File(dataFolder, "homes.db");
 
         try {
-            // Verifica se o driver JDBC está disponível
             Class.forName("org.sqlite.JDBC");
-
-            // Estabelece conexão com o banco de dados
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
 
-            // Cria a tabela de homes se não existir
             try (Statement stmt = connection.createStatement()) {
                 stmt.execute("CREATE TABLE IF NOT EXISTS homes (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -61,9 +54,6 @@ public class SQLiteManager {
         }
     }
 
-    /**
-     * Fecha a conexão com o banco de dados
-     */
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -75,12 +65,6 @@ public class SQLiteManager {
         }
     }
 
-    /**
-     * Salva uma home no banco de dados
-     *
-     * @param home A home a ser salva
-     * @return true se a operação foi bem-sucedida, false caso contrário
-     */
     public boolean saveHome(Home home) {
         String sql = "INSERT OR REPLACE INTO homes (player_uuid, name, world, x, y, z, yaw, pitch, creation_time) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -102,14 +86,6 @@ public class SQLiteManager {
             return false;
         }
     }
-
-    /**
-     * Exclui uma home do banco de dados
-     *
-     * @param playerUUID UUID do jogador
-     * @param homeName Nome da home
-     * @return true se a operação foi bem-sucedida, false caso contrário
-     */
     public boolean deleteHome(UUID playerUUID, String homeName) {
         String sql = "DELETE FROM homes WHERE player_uuid = ? AND name = ?";
 
@@ -124,14 +100,6 @@ public class SQLiteManager {
         }
     }
 
-    /**
-     * Renomeia uma home no banco de dados
-     *
-     * @param playerUUID UUID do jogador
-     * @param oldName Nome antigo da home
-     * @param newName Novo nome da home
-     * @return true se a operação foi bem-sucedida, false caso contrário
-     */
     public boolean renameHome(UUID playerUUID, String oldName, String newName) {
         // Verifica se o novo nome já existe
         if (getHome(playerUUID, newName) != null) {
@@ -151,14 +119,6 @@ public class SQLiteManager {
             return false;
         }
     }
-
-    /**
-     * Busca uma home específica do banco de dados
-     *
-     * @param playerUUID UUID do jogador
-     * @param homeName Nome da home
-     * @return A home encontrada ou null se não existir
-     */
     public Home getHome(UUID playerUUID, String homeName) {
         String sql = "SELECT * FROM homes WHERE player_uuid = ? AND LOWER(name) = LOWER(?)";
 
@@ -178,12 +138,6 @@ public class SQLiteManager {
         return null;
     }
 
-    /**
-     * Busca todas as homes de um jogador do banco de dados
-     *
-     * @param playerUUID UUID do jogador
-     * @return Lista de homes do jogador
-     */
     public List<Home> getPlayerHomes(UUID playerUUID) {
         List<Home> homes = new ArrayList<>();
         String sql = "SELECT * FROM homes WHERE player_uuid = ? ORDER BY name ASC";
@@ -206,12 +160,6 @@ public class SQLiteManager {
         return homes;
     }
 
-    /**
-     * Conta o número de homes que um jogador possui
-     *
-     * @param playerUUID UUID do jogador
-     * @return Número de homes do jogador
-     */
     public int getHomeCount(UUID playerUUID) {
         String sql = "SELECT COUNT(*) AS count FROM homes WHERE player_uuid = ?";
 
@@ -230,12 +178,6 @@ public class SQLiteManager {
         return 0;
     }
 
-    /**
-     * Atualiza a localização de uma home existente
-     *
-     * @param home A home com a nova localização
-     * @return true se a operação foi bem-sucedida, false caso contrário
-     */
     public boolean updateHomeLocation(Home home) {
         String sql = "UPDATE homes SET world = ?, x = ?, y = ?, z = ?, yaw = ?, pitch = ? WHERE player_uuid = ? AND name = ?";
 
@@ -256,12 +198,6 @@ public class SQLiteManager {
         }
     }
 
-    /**
-     * Extrai uma home de um ResultSet
-     *
-     * @param rs O ResultSet contendo os dados da home
-     * @return A home extraída ou null se não for possível
-     */
     private Home extractHomeFromResultSet(ResultSet rs) throws SQLException {
         String worldName = rs.getString("world");
         World world = Bukkit.getWorld(worldName);

@@ -38,7 +38,6 @@ public class CoordsCommand implements CommandExecutor {
         player.sendMessage(Main.colorize("&eDireção: &f" + direction));
 
         if (args.length > 0 && "share".equalsIgnoreCase(args[0]) && player.hasPermission("m4utils.coords.share")) {
-            // Compartilha no chat global
             plugin.getServer().broadcastMessage(Main.colorize("&6[Coords] &e" + player.getName() + " &fcompartilhou sua localização: " +
                     "&eX: &f" + x + " &eY: &f" + y + " &eZ: &f" + z + " &eMundo: &f" + world));
         }

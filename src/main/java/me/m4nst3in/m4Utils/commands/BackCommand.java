@@ -47,14 +47,11 @@ public class BackCommand implements CommandExecutor {
             return true;
         }
 
-        // Save current location before teleporting back
         Location currentLocation = player.getLocation();
 
-        // Get last location and teleport
         Location lastLocation = lastLocations.get(playerId);
         player.teleport(lastLocation);
 
-        // Update last location to be the previous position before using /back
         lastLocations.put(playerId, currentLocation);
 
         player.sendMessage(Main.colorize("&a✓ &7Você foi teleportado para sua localização anterior!"));
@@ -73,7 +70,6 @@ public class BackCommand implements CommandExecutor {
 
         @EventHandler
         public void onPlayerTeleport(PlayerTeleportEvent event) {
-            // Ignore teleports less than 5 blocks away in the same world
             if (shouldIgnoreTeleport(event)) {
                 return;
             }
@@ -88,12 +84,10 @@ public class BackCommand implements CommandExecutor {
             Location from = event.getFrom();
             Location to = event.getTo();
 
-            // Always register teleports between different worlds
             if (!from.getWorld().equals(to.getWorld())) {
                 return false;
             }
 
-            // For same world teleports, ignore small movements
             return from.distance(to) < 5.0;
         }
     }

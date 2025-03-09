@@ -15,7 +15,7 @@ import java.util.Random;
 public class PlayerHeadDropListener implements Listener {
     private final Main plugin;
     private final Random random = new Random();
-    private final double dropChance = 0.1; // 10% chance
+    private final double dropChance = 0.1;
 
     public PlayerHeadDropListener(Main plugin) {
         this.plugin = plugin;
@@ -25,25 +25,20 @@ public class PlayerHeadDropListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player victim = event.getEntity();
 
-        // Skip if the player killed themselves
         if (victim.getKiller() == null) {
             return;
         }
 
-        // 10% chance to drop head
         if (random.nextDouble() <= dropChance) {
-            // Create player head item
             ItemStack head = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) head.getItemMeta();
             meta.setOwningPlayer(victim);
             meta.setDisplayName(Main.colorize("&eCabeça de " + victim.getName()));
             head.setItemMeta(meta);
 
-            // Drop at death location
             Location dropLocation = victim.getLocation();
             dropLocation.getWorld().dropItemNaturally(dropLocation, head);
 
-            // Notify players
             victim.sendMessage(Main.colorize("&cSua cabeça foi derrubada!"));
             if (victim.getKiller() != null) {
                 victim.getKiller().sendMessage(Main.colorize("&aVocê derrubou a cabeça de &e" + victim.getName() + "&a!"));

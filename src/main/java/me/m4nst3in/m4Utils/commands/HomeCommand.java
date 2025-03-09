@@ -37,19 +37,16 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
 
         Player player = (Player) sender;
 
-        // Verifica se o jogador está em combate
         if (combatTracker.isInCombat(player)) {
             player.sendMessage(Main.colorize("&cVocê não pode usar /home durante o combate!"));
             return true;
         }
 
-        // Se não houver argumentos, abre o menu principal
         if (args.length == 0) {
             guiManager.openMainMenu(player);
             return true;
         }
 
-        // Processa subcomandos
         switch (args[0].toLowerCase()) {
             case "create":
             case "set":
@@ -96,7 +93,6 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
                 break;
 
             default:
-                // Considera o primeiro argumento como nome da home
                 teleportToHome(player, args[0]);
                 break;
         }
@@ -105,7 +101,6 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
     }
 
     private void createHome(Player player, String homeName) {
-        // Verifica se o nome contém caracteres válidos
         if (!homeName.matches("[a-zA-Z0-9_\\-]{1,16}")) {
             player.sendMessage(Main.colorize("&cO nome da home deve conter apenas letras, números, _ e -, e ter no máximo 16 caracteres!"));
             return;
@@ -142,7 +137,6 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        // Armazena localização inicial para verificar movimento
         final org.bukkit.Location initialLocation = player.getLocation().clone();
 
         player.sendMessage(Main.colorize("&aTeleportando para a home &e" + home.getName() + " &aem 3 segundos. Não se mova!"));
@@ -153,7 +147,6 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
 
             @Override
             public void run() {
-                // Verifica se o jogador se moveu
                 if (!player.isOnline() || !locationEquals(initialLocation, player.getLocation())) {
                     player.sendMessage(Main.colorize("&cTeleporte cancelado! Você se moveu."));
                     player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
@@ -162,7 +155,6 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
                 }
 
                 if (seconds <= 0) {
-                    // Teleporta o jogador
                     player.teleport(home.getLocation());
                     player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
 
@@ -173,7 +165,6 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
 
                     this.cancel();
                 } else {
-                    // Som de contagem regressiva
                     player.playSound(player.getLocation(), org.bukkit.Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
                     player.sendMessage(Main.colorize("&aTeleportando em " + seconds + " segundo(s)..."));
                     seconds--;
@@ -199,10 +190,8 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            // Sugestões para o primeiro argumento
             List<String> subCommands = List.of("create", "delete", "tp", "list", "manage");
 
-            // Adiciona subcomandos e nomes das homes do jogador
             completions.addAll(subCommands);
             completions.addAll(homeManager.getPlayerHomes(player.getUniqueId())
                     .stream()
@@ -210,7 +199,6 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
                     .collect(Collectors.toList()));
 
         } else if (args.length == 2) {
-            // Para subcomandos que requerem nome de home (delete, tp, manage)
             String subCommand = args[0].toLowerCase();
             if (subCommand.equals("delete") || subCommand.equals("tp") || subCommand.equals("manage")) {
                 completions.addAll(homeManager.getPlayerHomes(player.getUniqueId())
@@ -220,7 +208,6 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
             }
         }
 
-        // Filtra com base no texto já digitado
         String currentArg = args[args.length - 1].toLowerCase();
         return completions.stream()
                 .filter(s -> s.toLowerCase().startsWith(currentArg))

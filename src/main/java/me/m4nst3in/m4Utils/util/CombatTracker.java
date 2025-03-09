@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class CombatTracker implements Listener {
     private final Map<UUID, Long> playersInCombat = new HashMap<>();
-    private final long combatDuration = 10000; // 10 seconds combat tag
+    private final long combatDuration = 10000;
 
     public CombatTracker(JavaPlugin plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);

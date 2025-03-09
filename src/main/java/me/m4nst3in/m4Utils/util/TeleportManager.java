@@ -7,17 +7,16 @@ import java.util.*;
 
 public class TeleportManager {
     private final Main plugin;
-    private final Map<UUID, UUID> teleportRequests = new HashMap<>(); // target -> requester
-    private final Map<UUID, UUID> teleportHereRequests = new HashMap<>(); // target -> requester
+    private final Map<UUID, UUID> teleportRequests = new HashMap<>();
+    private final Map<UUID, UUID> teleportHereRequests = new HashMap<>();
     private final Set<UUID> teleportDisabled = new HashSet<>();
     private final Map<UUID, Long> lastRequestTime = new HashMap<>();
-    private static final long REQUEST_COOLDOWN = 30 * 1000; // 30 seconds cooldown
-    private static final long REQUEST_EXPIRY = 60 * 1000; // 60 seconds until request expires
+    private static final long REQUEST_COOLDOWN = 30 * 1000;
+    private static final long REQUEST_EXPIRY = 60 * 1000;
 
     public TeleportManager(Main plugin) {
         this.plugin = plugin;
 
-        // Schedule task to clear expired requests
         plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this::clearExpiredRequests, 20L * 60, 20L * 60);
     }
 
@@ -73,11 +72,9 @@ public class TeleportManager {
             if (currentTime - entry.getValue() > REQUEST_EXPIRY) {
                 UUID playerId = entry.getKey();
 
-                // Remove from both request maps
                 teleportRequests.entrySet().removeIf(e -> e.getValue().equals(playerId));
                 teleportHereRequests.entrySet().removeIf(e -> e.getValue().equals(playerId));
 
-                // Remove from last request time
                 iterator.remove();
             }
         }

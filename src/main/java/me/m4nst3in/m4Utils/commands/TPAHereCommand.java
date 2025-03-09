@@ -40,7 +40,6 @@ public class TPAHereCommand implements CommandExecutor {
             return true;
         }
 
-        // Check if player is in combat
         if (combatTracker.isInCombat(player)) {
             player.sendMessage(Main.colorize("&cVocê não pode usar /tpahere durante combate!"));
             return true;

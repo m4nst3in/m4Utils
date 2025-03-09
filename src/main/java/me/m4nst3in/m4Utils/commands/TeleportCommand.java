@@ -23,7 +23,6 @@ public class TeleportCommand implements CommandExecutor {
             return true;
         }
 
-        // /tp [player]
         if (args.length == 1) {
             if (!(sender instanceof Player)) {
                 sender.sendMessage(Main.colorize("&cConsole can only use /tp [player] [target]"));
@@ -49,7 +48,6 @@ public class TeleportCommand implements CommandExecutor {
 
             return true;
         }
-        // /tp [player] [target]
         else if (args.length == 2) {
             if (!sender.hasPermission("m4utils.teleport.others")) {
                 sender.sendMessage(Main.colorize("&cVocê não tem permissão para teleportar outros jogadores!"));
@@ -75,7 +73,6 @@ public class TeleportCommand implements CommandExecutor {
 
             return true;
         }
-        // /tp [x] [y] [z]
         else if (args.length == 3) {
             if (!(sender instanceof Player)) {
                 sender.sendMessage(Main.colorize("&cApenas jogadores podem usar este comando!"));

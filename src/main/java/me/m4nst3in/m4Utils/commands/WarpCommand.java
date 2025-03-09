@@ -28,13 +28,11 @@ public class WarpCommand implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            // Open main warp menu
             warpGUIManager.openWarpMenu(player);
             return true;
         }
 
         if (args.length >= 1 && args[0].equalsIgnoreCase("tp") && args.length >= 2) {
-            // Direct teleport to warp
             String warpName = args[1];
             Warp warp = warpManager.getWarp(warpName);
 
@@ -49,7 +47,6 @@ public class WarpCommand implements CommandExecutor {
         }
 
         if (args.length >= 1 && args[0].equalsIgnoreCase("del") && args.length >= 2) {
-            // Delete warp
             if (!player.hasPermission("m4utils.warp.delete")) {
                 player.sendMessage(Main.colorize("&8&l» &cVocê não tem permissão para deletar warps!"));
                 return true;
@@ -66,7 +63,6 @@ public class WarpCommand implements CommandExecutor {
             return true;
         }
 
-        // If no valid subcommand, open main menu
         warpGUIManager.openWarpMenu(player);
         return true;
     }

@@ -42,7 +42,6 @@ public class TPAcceptCommand implements CommandExecutor {
             return true;
         }
 
-        // Handle teleport here request
         if (hereRequesterId != null) {
             Player requester = plugin.getServer().getPlayer(hereRequesterId);
             if (requester == null) {
@@ -51,7 +50,6 @@ public class TPAcceptCommand implements CommandExecutor {
                 return true;
             }
 
-            // Check if requester is in combat
             if (combatTracker.isInCombat(requester)) {
                 player.sendMessage(Main.colorize("&c" + requester.getName() + " está em combate e não pode se teleportar!"));
                 requester.sendMessage(Main.colorize("&cSeu pedido de teleporte não pode ser completado porque você está em combate!"));
@@ -64,7 +62,6 @@ public class TPAcceptCommand implements CommandExecutor {
             Location initialLocation = requester.getLocation().clone();
             requester.sendMessage(Main.colorize("&aTeleportando em 3 segundos. Não se mova!"));
 
-            // Schedule the teleport with delay and movement check
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -83,13 +80,12 @@ public class TPAcceptCommand implements CommandExecutor {
                     requester.playSound(requester.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
                     requester.sendMessage(Main.colorize("&aTeleportado até " + player.getName() + "!"));
                 }
-            }.runTaskLater(plugin, 60L); // 3 seconds delay
+            }.runTaskLater(plugin, 60L);
 
             teleportManager.clearRequests(player);
             return true;
         }
 
-        // Handle normal teleport request
         if (requesterId != null) {
             Player requester = plugin.getServer().getPlayer(requesterId);
             if (requester == null) {
@@ -97,8 +93,6 @@ public class TPAcceptCommand implements CommandExecutor {
                 teleportManager.clearRequests(player);
                 return true;
             }
-
-            // Check if requester is in combat
             if (combatTracker.isInCombat(requester)) {
                 player.sendMessage(Main.colorize("&c" + requester.getName() + " está em combate e não pode se teleportar!"));
                 requester.sendMessage(Main.colorize("&cSeu pedido de teleporte não pode ser completado porque você está em combate!"));
@@ -111,7 +105,6 @@ public class TPAcceptCommand implements CommandExecutor {
             Location initialLocation = requester.getLocation().clone();
             requester.sendMessage(Main.colorize("&aTeleportando em 3 segundos. Não se mova!"));
 
-            // Schedule the teleport with delay and movement check
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -131,7 +124,7 @@ public class TPAcceptCommand implements CommandExecutor {
                     requester.playSound(requester.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
                     requester.sendMessage(Main.colorize("&aTeleportado até " + player.getName() + "!"));
                 }
-            }.runTaskLater(plugin, 60L); // 3 seconds delay
+            }.runTaskLater(plugin, 60L);
 
             teleportManager.clearRequests(player);
             return true;
@@ -140,7 +133,6 @@ public class TPAcceptCommand implements CommandExecutor {
         return true;
     }
 
-    // Helper method to compare locations (ignoring pitch and yaw)
     private boolean locationEquals(Location loc1, Location loc2) {
         return loc1.getWorld().equals(loc2.getWorld()) &&
                 loc1.getBlockX() == loc2.getBlockX() &&

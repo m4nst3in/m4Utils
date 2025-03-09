@@ -42,24 +42,20 @@ public class WarpChatListener implements Listener {
         WarpCreationData data = pendingWarpCreations.get(playerId);
 
         if (data.stage == 0) {
-            // Name stage
             data.name = message;
             data.stage = 1;
             player.sendMessage(Main.colorize("&8&l» &7Digite no chat o nome de exibição da warp."));
         } else if (data.stage == 1) {
-            // Display name stage
             data.displayName = message;
             data.stage = 2;
             player.sendMessage(Main.colorize("&8&l» &7Digite no chat a descrição da warp."));
         } else if (data.stage == 2) {
-            // Description stage
             data.description = message;
 
-            // Create the warp
             boolean success = warpManager.createWarp(
                     data.name,
                     player.getLocation(),
-                    Material.ENDER_PEARL, // Default icon
+                    Material.ENDER_PEARL,
                     data.displayName,
                     data.description
             );
@@ -70,12 +66,10 @@ public class WarpChatListener implements Listener {
                 player.sendMessage(Main.colorize("&8&l» &cErro ao criar warp. Este nome já existe ou é inválido."));
             }
 
-            // Remove from pending
             pendingWarpCreations.remove(playerId);
         }
     }
 
-    // Helper class to store warp creation data
     private static class WarpCreationData {
         int stage = 0;
         String name;

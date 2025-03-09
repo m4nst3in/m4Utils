@@ -33,17 +33,14 @@ public class WarpGUIManager {
     public void openWarpMenu(Player player) {
         Inventory menu = Bukkit.createInventory(null, 27, ChatColor.DARK_GRAY + "WARPS");
 
-        // Lista de Warps item
         ItemStack listWarps = createItem(Material.COMPASS, "&a&lLista de Warps", "&7Visualize todas as warps disponíveis");
         menu.setItem(11, listWarps);
 
-        // Criar Warp item (apenas para jogadores com permissão)
         if (player.hasPermission("m4utils.warp.create")) {
             ItemStack createWarp = createItem(Material.EMERALD, "&a&lCriar Warp", "&7Crie uma nova warp");
             menu.setItem(15, createWarp);
         }
 
-        // Enfeites
         ItemStack glass = createItem(Material.BLACK_STAINED_GLASS_PANE, " ", "");
         for (int i = 0; i < 27; i++) {
             if (menu.getItem(i) == null) {
@@ -57,7 +54,6 @@ public class WarpGUIManager {
     public void openWarpList(Player player) {
         Inventory menu = Bukkit.createInventory(null, 27, ChatColor.DARK_GRAY + "LISTA DE WARPS");
 
-        // Add warps (first 2 rows)
         int slot = 0;
         for (Map.Entry<String, Warp> entry : warpManager.getAllWarps()) {
             if (slot >= 18) break; // Only use first 2 rows
@@ -72,12 +68,10 @@ public class WarpGUIManager {
             menu.setItem(slot++, warpItem);
         }
 
-        // Fill empty slots in first 2 rows
         for (int i = slot; i < 18; i++) {
             menu.setItem(i, createItem(Material.BLACK_STAINED_GLASS_PANE, " ", ""));
         }
 
-        // Last row: decoration and back button
         for (int i = 18; i < 27; i++) {
             if (i == 22) {
                 menu.setItem(i, createItem(Material.ARROW, "&c&lVoltar", "&7Voltar para o menu principal"));

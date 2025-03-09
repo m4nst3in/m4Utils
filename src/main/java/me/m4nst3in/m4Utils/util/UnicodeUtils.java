@@ -1,12 +1,9 @@
-package me.m4nst3in.m4Utils.utils;
+package me.m4nst3in.m4Utils.util;
 
 import org.bukkit.ChatColor;
 
 public class UnicodeUtils {
 
-    /**
-     * Unicode symbols that can be used for decoration
-     */
     public static final class Symbols {
         // Stars and Sparkles
         public static final String STAR = "★";  // Black star
@@ -67,12 +64,6 @@ public class UnicodeUtils {
         public static final String COMET = "☄";  // Comet
     }
 
-    /**
-     * Processes a string to replace Unicode placeholder codes with actual Unicode characters
-     *
-     * @param input The input string containing placeholders like {STAR}
-     * @return String with Unicode characters
-     */
     public static String processUnicode(String input) {
         if (input == null) return null;
 
@@ -118,12 +109,6 @@ public class UnicodeUtils {
                 .replace("{COMET}", Symbols.COMET);
     }
 
-    /**
-     * Translates color codes and processes Unicode placeholders
-     *
-     * @param input The input string
-     * @return Formatted string with colors and Unicode characters
-     */
     public static String formatString(String input) {
         if (input == null) return null;
         return ChatColor.translateAlternateColorCodes('&', processUnicode(input));

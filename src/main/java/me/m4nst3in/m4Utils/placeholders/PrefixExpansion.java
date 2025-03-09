@@ -2,16 +2,13 @@ package me.m4nst3in.m4Utils.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.m4nst3in.m4Utils.Main;
-import me.m4nst3in.m4Utils.utils.UnicodeUtils;
+import me.m4nst3in.m4Utils.util.UnicodeUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.ChatColor;
 
 import java.util.List;
 
-/**
- * This class will register our own placeholders to be used in other plugins
- */
 public class PrefixExpansion extends PlaceholderExpansion {
     private final Main plugin;
 
@@ -36,7 +33,7 @@ public class PrefixExpansion extends PlaceholderExpansion {
 
     @Override
     public boolean persist() {
-        return true; // This is required to persist through server reloads
+        return true;
     }
 
     @Override
@@ -45,7 +42,6 @@ public class PrefixExpansion extends PlaceholderExpansion {
             return "";
         }
 
-        // Access LuckPerms placeholders
         if (identifier.equals("full_prefix")) {
             return createFullPrefix(player);
         }
@@ -55,7 +51,6 @@ public class PrefixExpansion extends PlaceholderExpansion {
             return plugin.getConfig().getString("prefix.colors." + group + ".name", "§f");
         }
 
-        // Group decorations
         if (identifier.startsWith("decoration_")) {
             String group = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, "%luckperms_primary_group%");
 
@@ -72,20 +67,17 @@ public class PrefixExpansion extends PlaceholderExpansion {
             }
         }
 
-        return null; // Placeholder is not recognized by our plugin
+        return null;
     }
 
     private String createFullPrefix(Player player) {
-        // Get group through PlaceholderAPI's LuckPerms expansion
         String group = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, "%luckperms_primary_group%");
         String groupPrefix = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, "%luckperms_prefix%");
 
-        // If LuckPerms doesn't return a prefix, use the one from config
         if (groupPrefix == null || groupPrefix.isEmpty()) {
             groupPrefix = plugin.getConfig().getString("prefix.colors." + group + ".prefix", "§7") + group;
         }
 
-        // Get unicode decorations from config
         String leftDecoration = plugin.getConfig().getString("prefix.decorations." + group + ".left",
                 plugin.getConfig().getString("prefix.decorations.default.left", "❖"));
         String rightDecoration = plugin.getConfig().getString("prefix.decorations." + group + ".right",
@@ -93,10 +85,8 @@ public class PrefixExpansion extends PlaceholderExpansion {
         leftDecoration = UnicodeUtils.processUnicode(leftDecoration);
         rightDecoration = UnicodeUtils.processUnicode(rightDecoration);
 
-        // Get player name color from config
         String nameColor = plugin.getConfig().getString("prefix.colors." + group + ".name", "§f");
 
-        // Create formatted prefix with decorations
         String format = plugin.getConfig().getString("prefix.format", "{decoration_left} {group_prefix} {player_name_color}{player_name} {decoration_right}");
         String result = format
                 .replace("{decoration_left}", leftDecoration)
@@ -105,7 +95,6 @@ public class PrefixExpansion extends PlaceholderExpansion {
                 .replace("{player_name_color}", nameColor)
                 .replace("{player_name}", player.getName());
 
-        // Process any custom placeholders from config
         if (plugin.getConfig().getBoolean("prefix.custom_placeholders.enabled", true)) {
             List<String> customPlaceholders = plugin.getConfig().getStringList("prefix.custom_placeholders.placeholders");
             for (String placeholder : customPlaceholders) {
@@ -116,7 +105,6 @@ public class PrefixExpansion extends PlaceholderExpansion {
             }
         }
 
-        // Process any remaining PlaceholderAPI placeholders
         result = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, result);
 
         return ChatColor.translateAlternateColorCodes('&', result);

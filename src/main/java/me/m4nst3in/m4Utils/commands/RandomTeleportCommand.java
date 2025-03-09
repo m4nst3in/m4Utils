@@ -42,7 +42,6 @@ public class RandomTeleportCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        // Check cooldown
         if (cooldowns.containsKey(player.getUniqueId())) {
             long timeRemaining = cooldowns.get(player.getUniqueId()) - System.currentTimeMillis();
             if (timeRemaining > 0) {
@@ -52,13 +51,11 @@ public class RandomTeleportCommand implements CommandExecutor {
             }
         }
 
-        // Cancel existing teleport request if exists
         if (pendingTeleports.containsKey(player.getUniqueId())) {
             pendingTeleports.get(player.getUniqueId()).cancel();
             pendingTeleports.remove(player.getUniqueId());
         }
 
-        // Store initial location for movement check
         Location initialLocation = player.getLocation().clone();
 
         player.sendMessage(Main.colorize("&aTeleportando para um local aleatório em 5 segundos. Não se mova!"));
@@ -69,7 +66,6 @@ public class RandomTeleportCommand implements CommandExecutor {
 
             @Override
             public void run() {
-                // Check if player moved
                 if (!player.isOnline() || !locationEquals(initialLocation, player.getLocation())) {
                     player.sendMessage(Main.colorize("&cTeleporte cancelado! Você se moveu."));
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
@@ -79,10 +75,8 @@ public class RandomTeleportCommand implements CommandExecutor {
                 }
 
                 if (seconds <= 0) {
-                    // Set cooldown
                     cooldowns.put(player.getUniqueId(), System.currentTimeMillis() + (cooldownSeconds * 1000L));
 
-                    // Find safe location
                     Location safeLocation = findSafeLocation(player.getWorld());
 
                     if (safeLocation != null) {
@@ -104,7 +98,6 @@ public class RandomTeleportCommand implements CommandExecutor {
                     pendingTeleports.remove(player.getUniqueId());
                     this.cancel();
                 } else {
-                    // Play countdown sound
                     player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
                     player.sendMessage(Main.colorize("&aTeleportando em " + seconds + " segundo(s)..."));
                     seconds--;
@@ -142,11 +135,9 @@ public class RandomTeleportCommand implements CommandExecutor {
         Block ground = location.clone().subtract(0, 1, 0).getBlock();
         Block head = location.clone().add(0, 1, 0).getBlock();
 
-        // Check if player has space and solid ground
         boolean notSuffocating = feet.getType().isAir() && head.getType().isAir();
         boolean solidGround = ground.getType().isSolid() && !ground.isLiquid();
 
-        // Check for dangerous blocks
         boolean notDangerous = ground.getType() != Material.LAVA
                 && ground.getType() != Material.MAGMA_BLOCK
                 && ground.getType() != Material.CACTUS

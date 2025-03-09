@@ -33,10 +33,10 @@ public class WeatherCommand implements CommandExecutor {
             world = plugin.getServer().getWorlds().get(0);
         }
 
-        int duration = 6000; // Default: 5 minutes
+        int duration = 6000;
         if (args.length > 1) {
             try {
-                duration = Integer.parseInt(args[1]) * 20; // Convert to ticks
+                duration = Integer.parseInt(args[1]) * 20;
             } catch (NumberFormatException e) {
                 sender.sendMessage(Main.colorize("&cDuração inválida! Usando o valor padrão."));
             }

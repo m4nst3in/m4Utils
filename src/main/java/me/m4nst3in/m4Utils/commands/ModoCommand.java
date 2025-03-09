@@ -34,7 +34,6 @@ public class ModoCommand implements CommandExecutor, Listener {
 
         Player player = (Player) sender;
 
-        // If arguments are provided, try to change mode directly
         if (args.length > 0) {
             String modeArg = args[0].toLowerCase();
 
@@ -52,7 +51,6 @@ public class ModoCommand implements CommandExecutor, Listener {
             return true;
         }
 
-        // No arguments provided, open GUI
         openModeGUI(player);
         return true;
     }

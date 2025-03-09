@@ -50,17 +50,14 @@ public class PingCommand implements CommandExecutor {
 
     private int getPing(Player player) {
         try {
-            // Tentativa de obter ping via método nativo
             Method pingMethod = player.getClass().getDeclaredMethod("getPing");
             return (int) pingMethod.invoke(player);
         } catch (Exception e) {
             try {
-                // Tentativa alternativa para versões mais recentes
                 Object entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
                 Field pingField = entityPlayer.getClass().getDeclaredField("ping");
                 return pingField.getInt(entityPlayer);
             } catch (Exception ex) {
-                // Fallback para um valor padrão
                 return 0;
             }
         }
@@ -74,7 +71,7 @@ public class PingCommand implements CommandExecutor {
         } else if (ping < 150) {
             return "&e"; // Amarelo para ping médio
         } else if (ping < 300) {
-            return "&6"; // Dourado para ping ruim
+            return "&6"; // dourado para ping ruim
         } else {
             return "&c"; // Vermelho para ping péssimo
         }

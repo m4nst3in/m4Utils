@@ -31,7 +31,6 @@ public class SetSpawnCommand implements CommandExecutor {
 
         Location location = player.getLocation();
 
-        // Save spawn location to config
         plugin.getConfig().set("spawn.world", location.getWorld().getName());
         plugin.getConfig().set("spawn.x", location.getX());
         plugin.getConfig().set("spawn.y", location.getY());

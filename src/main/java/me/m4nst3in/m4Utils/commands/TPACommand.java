@@ -46,7 +46,6 @@ public class TPACommand implements CommandExecutor {
             return true;
         }
 
-        // Check if player is in combat
         if (combatTracker.isInCombat(player)) {
             player.sendMessage(Main.colorize("&c⚔ &7Você não pode usar &e/tpa &7durante combate!"));
             return true;
@@ -77,7 +76,6 @@ public class TPACommand implements CommandExecutor {
 
         player.sendMessage(Main.colorize("&a✓ &7Você enviou um pedido de teleporte para &f" + target.getName()));
 
-        // Mensagem inicial com decoração
         target.sendMessage(Component.text("┌─────────── ").color(NamedTextColor.DARK_GRAY)
                 .append(Component.text("✉ Pedido de Teleporte ").color(NamedTextColor.GOLD).decorate(TextDecoration.BOLD))
                 .append(Component.text("───────────┐").color(NamedTextColor.DARK_GRAY)));
@@ -86,7 +84,6 @@ public class TPACommand implements CommandExecutor {
                 .append(Component.text(player.getName()).color(NamedTextColor.YELLOW))
                 .append(Component.text(" gostaria de se teleportar até você.").color(NamedTextColor.GRAY)));
 
-        // Botões interativos
         TextComponent acceptButton = Component.text("[ ✓ ACEITAR ]")
                 .color(NamedTextColor.GREEN)
                 .decorate(TextDecoration.BOLD)
@@ -102,16 +99,13 @@ public class TPACommand implements CommandExecutor {
                 .clickEvent(ClickEvent.runCommand("/tpdeny"))
                 .hoverEvent(HoverEvent.showText(Component.text("➜ Clique para recusar o teleporte").color(NamedTextColor.GRAY)));
 
-        // Combine all components
         Component buttonsMessage = Component.text("│ ").color(NamedTextColor.DARK_GRAY)
                 .append(acceptButton)
                 .append(separator)
                 .append(denyButton);
 
-        // Send interactive buttons
         target.sendMessage(buttonsMessage);
 
-        // Closing line
         target.sendMessage(Component.text("└───────────────────────────────────────────┘").color(NamedTextColor.DARK_GRAY));
 
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);

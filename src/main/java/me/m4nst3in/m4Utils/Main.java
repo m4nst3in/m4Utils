@@ -35,11 +35,9 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        // Carregar configurações
         configManager = new ConfigManager(this);
         configManager.loadConfig();
 
-        // Configurar configuração padrão para homes se não existir
         getConfig().addDefault("homes.default-max-homes", 3);
         getConfig().options().copyDefaults(true);
         saveConfig();
@@ -57,24 +55,18 @@ public final class Main extends JavaPlugin {
         CustomCraftingManager craftingManager = new CustomCraftingManager(this);
         craftingManager.registerRecipes();
 
-    // Initialize managers
         CombatTracker combatTracker = new CombatTracker(this);
         homeManager = new HomeManager(this);
         afkManager = new AFKManager(this);
         warpManager = new WarpManager(this);
 
-        // Chat Listener
         WarpChatListener warpChatListener = new WarpChatListener(this, warpManager);
 
-
-        // Initialize GUI managers
         HomeGUIManager homeGUIManager = new HomeGUIManager(this, homeManager);
         WarpGUIManager warpGUIManager = new WarpGUIManager(this, warpManager);
         teleportManager = new TeleportManager(this);
         warpGUIManager.setChatListener(warpChatListener);
 
-
-        // Register event listeners
         getServer().getPluginManager().registerEvents(new MOTDManager(this, configManager), this);
         getServer().getPluginManager().registerEvents(new JoinTitleManager(this), this);
         getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);
@@ -88,7 +80,6 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerHeadDropListener(this), this);
         getServer().getPluginManager().registerEvents(new CustomMessagesListener(this), this);
 
-        // Register commands
         getCommand("m4reload").setExecutor(new ReloadCommand(this, configManager));
         getCommand("spawn").setExecutor(new SpawnCommand(this, combatTracker));
         getCommand("modo").setExecutor(new ModoCommand(this));
@@ -120,8 +111,6 @@ public final class Main extends JavaPlugin {
         getCommand("back").setExecutor(new BackCommand(this));
         getCommand("coords").setExecutor(new CoordsCommand(this));
 
-
-        // Registra o comando do TabList
         getLogger().info("M4Utils plugin enabled successfully!");
     }
 
@@ -142,21 +131,6 @@ public final class Main extends JavaPlugin {
 
     public static String colorize(String message) {
         return message.replace("&", "§");
-    }
-
-    public HomeManager getHomeManager() {
-        return homeManager;
-    }
-
-    public static Main getInstance() {
-        return instance;
-    }
-
-    public WarpManager getWarpManager() {
-        return warpManager;
-    }
-    public PrefixManager getPrefixManager() {
-        return prefixManager;
     }
 
 }

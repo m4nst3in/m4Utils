@@ -18,8 +18,8 @@ public class JoinTitleManager implements Listener {
         event.getPlayer().sendTitle(
                 Main.colorize("&eSEJA BEM-VINDO(a)"),
                 Main.colorize("&ePlatform Destroyer - Survival"),
-                10,  // fade in (ticks)
-                70,  // stay time (ticks)
-                20); // fade out (ticks)
+                10,
+                70,
+                20);
     }
 }

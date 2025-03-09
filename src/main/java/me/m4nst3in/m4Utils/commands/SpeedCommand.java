@@ -33,7 +33,6 @@ public class SpeedCommand implements CommandExecutor {
                 sender.sendMessage(Main.colorize("&cA velocidade deve estar entre 0 e 10!"));
                 return true;
             }
-            // Converte para valor real (0-1)
             speed = speed / 10;
         } catch (NumberFormatException e) {
             sender.sendMessage(Main.colorize("&cVelocidade inválida! Use um número de 0 a 10."));

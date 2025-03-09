@@ -17,7 +17,6 @@ public class VanishListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player joiningPlayer = event.getPlayer();
 
-        // Hide vanished players from the joining player
         for (Player onlinePlayer : plugin.getServer().getOnlinePlayers()) {
             if (onlinePlayer.hasMetadata("vanished") && onlinePlayer.getMetadata("vanished").get(0).asBoolean()) {
                 if (!joiningPlayer.hasPermission("m4utils.vanish.see")) {
@@ -26,7 +25,6 @@ public class VanishListener implements Listener {
             }
         }
 
-        // If joining player is vanished, hide them from others
         if (joiningPlayer.hasMetadata("vanished") && joiningPlayer.getMetadata("vanished").get(0).asBoolean()) {
             for (Player onlinePlayer : plugin.getServer().getOnlinePlayers()) {
                 if (!onlinePlayer.hasPermission("m4utils.vanish.see") && onlinePlayer != joiningPlayer) {

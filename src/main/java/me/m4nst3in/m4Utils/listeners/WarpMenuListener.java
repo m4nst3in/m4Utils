@@ -50,7 +50,6 @@ public class WarpMenuListener implements Listener {
         ItemMeta meta = clickedItem.getItemMeta();
         String displayName = ChatColor.stripColor(meta.getDisplayName());
 
-        // Main Menu options
         if (title.contains("WARPS") && !title.contains("LISTA DE")) {
             if (displayName.equals("Lista de Warps")) {
                 warpGUIManager.openWarpList(player);
@@ -60,7 +59,6 @@ public class WarpMenuListener implements Listener {
                 return;
             }
         }
-        // Warp list options
         else if (title.contains("LISTA DE WARPS")) {
             for (Map.Entry<String, Warp> entry : warpManager.getAllWarps()) {
                 Warp warp = entry.getValue();

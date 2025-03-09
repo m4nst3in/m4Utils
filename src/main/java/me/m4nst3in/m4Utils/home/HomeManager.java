@@ -19,17 +19,14 @@ public class HomeManager {
     private final File homesFile;
     private final FileConfiguration homesConfig;
 
-    // Configuração de quantas homes um jogador pode ter (padrão)
     private final int defaultMaxHomes;
 
     public HomeManager(Main plugin) {
         this.plugin = plugin;
         this.homesFile = new File(plugin.getDataFolder(), "homes.yml");
 
-        // Carrega a configuração de limite de homes do config.yml
         this.defaultMaxHomes = plugin.getConfig().getInt("homes.default-max-homes", 3);
 
-        // Configura a serialização de objetos Home
         if (!homesFile.exists()) {
             try {
                 homesFile.createNewFile();
@@ -116,12 +113,10 @@ public class HomeManager {
         UUID uuid = player.getUniqueId();
         Map<String, Home> homes = playerHomes.getOrDefault(uuid, new HashMap<>());
 
-        // Verifica se o jogador já atingiu o limite de homes
         if (homes.size() >= getMaxHomes(player)) {
             return false;
         }
 
-        // Verifica se o nome da home já existe
         String homeKey = homeName.toLowerCase();
         if (homes.containsKey(homeKey)) {
             return false;
@@ -131,7 +126,6 @@ public class HomeManager {
         homes.put(homeKey, home);
         playerHomes.put(uuid, homes);
 
-        // Salva as homes
         saveHomes();
         return true;
     }
@@ -157,16 +151,13 @@ public class HomeManager {
         String oldKey = oldName.toLowerCase();
         String newKey = newName.toLowerCase();
 
-        // Verifica se a nova chave já existe
         if (homes.containsKey(newKey)) {
             return false;
         }
 
-        // Obtém e remove a home antiga
         Home home = homes.remove(oldKey);
         if (home == null) return false;
 
-        // Atualiza o nome da home e a adiciona novamente
         home.setName(newName);
         homes.put(newKey, home);
 
@@ -194,14 +185,12 @@ public class HomeManager {
     }
 
     public int getMaxHomes(Player player) {
-        // Verifica permissões especiais para mais homes
         for (int i = 20; i >= 1; i--) {
             if (player.hasPermission("m4utils.homes." + i)) {
                 return i;
             }
         }
 
-        // Retorna o valor padrão
         return defaultMaxHomes;
     }
 }
