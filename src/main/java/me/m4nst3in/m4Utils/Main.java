@@ -79,6 +79,9 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ExploitItemBlocker(this), this);
         getServer().getPluginManager().registerEvents(new PlayerHeadDropListener(this), this);
         getServer().getPluginManager().registerEvents(new CustomMessagesListener(this), this);
+        getServer().getPluginManager().registerEvents(new AdvancementHideListener(this), this);
+        getServer().getPluginManager().registerEvents(new CommandBlockerListener(this), this);
+        getServer().getPluginManager().registerEvents(new ItemStackerListener(this), this);
 
         getCommand("m4reload").setExecutor(new ReloadCommand(this, configManager));
         getCommand("spawn").setExecutor(new SpawnCommand(this, combatTracker));

@@ -145,3 +145,7 @@ commands:
     usage: /coords [share]
     aliases: [ pos, location, loc, coordenadas ]
     permission: m4utils.coords
+permissions:
+  m4utils.commands.bypass:
+    description: Permite que o jogador use comandos padrão do Bukkit
+    default: op

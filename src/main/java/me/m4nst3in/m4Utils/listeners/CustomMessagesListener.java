@@ -43,7 +43,6 @@ public class CustomMessagesListener implements Listener {
     private static final String DEATH_WITHER = "&c{player} &7morreu pelo efeito wither";
 
     private static final String ADVANCEMENT = "&e{player} &7completou a conquista &6[{advancement}]&7!";
-    private static final String LEVEL_UP = "&e{player} &7subiu para o nível &a{level}&7!";
     private static final String KICK = "&c{player} &7foi expulso do servidor!";
     private static final String JOIN = "&a{player} &eentrou no servidor";
     private static final String QUIT = "&c{player} &esaiu do servidor";
@@ -122,26 +121,20 @@ public class CustomMessagesListener implements Listener {
         String message = Main.colorize(ADVANCEMENT
                 .replace("{player}", event.getPlayer().getName())
                 .replace("{advancement}", getAdvancementName(key)));
-        Bukkit.broadcastMessage(message);
+
+        // Envia a mensagem apenas para o jogador que recebeu a conquista
+        event.getPlayer().sendMessage(message);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerLevelChange(PlayerLevelChangeEvent event) {
-        if (event.getNewLevel() > event.getOldLevel()) {
-            String message = Main.colorize(LEVEL_UP
-                    .replace("{player}", event.getPlayer().getName())
-                    .replace("{level}", String.valueOf(event.getNewLevel())));
-            Bukkit.broadcastMessage(message);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler
     public void onPlayerKick(PlayerKickEvent event) {
-        if (!event.isCancelled()) {
-            event.setLeaveMessage(null);
-            String message = Main.colorize(KICK.replace("{player}", event.getPlayer().getName()));
-            Bukkit.broadcastMessage(message);
+        String leaveMessage = event.getLeaveMessage();
+        if (leaveMessage == null) {
+            return;  // Skip processing if message is null
         }
+
+        String customMessage = Main.colorize(KICK.replace("{player}", event.getPlayer().getName()));
+        event.setLeaveMessage(customMessage);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
