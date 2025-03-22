@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HomeManager {
     private final Main plugin;
@@ -55,8 +56,11 @@ public class HomeManager {
 
                     String worldName = homeSection.getString("world");
                     World world = Bukkit.getWorld(worldName);
+
+                    // Skip invalid homes but keep them in config
                     if (world == null) {
-                        plugin.getLogger().warning("Mundo não encontrado para home " + homeName + " do jogador " + playerUUID);
+                        plugin.getLogger().warning("Mundo '" + worldName + "' não encontrado para home '" +
+                                homeName + "' do jogador " + playerUUID + ". Home será ignorada até o mundo ser carregado.");
                         continue;
                     }
 
@@ -67,14 +71,14 @@ public class HomeManager {
                     float pitch = (float) homeSection.getDouble("pitch", 0.0);
 
                     Location location = new Location(world, x, y, z, yaw, pitch);
-                    long creationTime = homeSection.getLong("creation-time", System.currentTimeMillis());
-
                     Home home = new Home(homeName, location, uuid);
                     homes.put(homeName.toLowerCase(), home);
                 }
             }
 
-            playerHomes.put(uuid, homes);
+            if (!homes.isEmpty()) {
+                playerHomes.put(uuid, homes);
+            }
         }
 
         plugin.getLogger().info("Carregadas " + playerHomes.size() + " homes de jogadores.");
@@ -86,12 +90,17 @@ public class HomeManager {
         for (Map.Entry<UUID, Map<String, Home>> entry : playerHomes.entrySet()) {
             UUID playerUUID = entry.getKey();
             Map<String, Home> homes = entry.getValue();
-
             for (Home home : homes.values()) {
                 String path = "homes." + playerUUID + "." + home.getName();
                 Location loc = home.getLocation();
+                String worldName = loc.getWorld() != null ? loc.getWorld().getName() : "";
 
-                homesConfig.set(path + ".world", loc.getWorld().getName());
+                if (worldName.isEmpty()) {
+                    plugin.getLogger().warning("Skipping save of home '" + home.getName() + "' for player " + playerUUID + " - Invalid world");
+                    continue;
+                }
+
+                homesConfig.set(path + ".world", worldName);
                 homesConfig.set(path + ".x", loc.getX());
                 homesConfig.set(path + ".y", loc.getY());
                 homesConfig.set(path + ".z", loc.getZ());
@@ -112,6 +121,13 @@ public class HomeManager {
     public boolean createHome(Player player, String homeName) {
         UUID uuid = player.getUniqueId();
         Map<String, Home> homes = playerHomes.getOrDefault(uuid, new HashMap<>());
+
+        // Verificar se o mundo é permitido
+        String worldName = player.getWorld().getName();
+        if (!worldName.equals("mundo_helix") && !worldName.equals("mundo_chaos")) {
+            player.sendMessage(Main.colorize("&cVocê só pode criar homes nos mundos: &emundo_helix &ce &emundo_chaos&c!"));
+            return false;
+        }
 
         if (homes.size() >= getMaxHomes(player)) {
             return false;
@@ -165,18 +181,29 @@ public class HomeManager {
         return true;
     }
 
+    public boolean isHomeValid(Home home) {
+        if (home == null) return false;
+        Location loc = home.getLocation();
+        if (loc == null) return false;
+        World world = loc.getWorld();
+        return world != null && Bukkit.getWorld(world.getName()) != null;
+    }
+
     public Home getHome(UUID playerUUID, String homeName) {
         Map<String, Home> homes = playerHomes.get(playerUUID);
         if (homes == null) return null;
 
-        return homes.get(homeName.toLowerCase());
+        Home home = homes.get(homeName.toLowerCase());
+        return isHomeValid(home) ? home : null;
     }
 
     public List<Home> getPlayerHomes(UUID playerUUID) {
         Map<String, Home> homes = playerHomes.get(playerUUID);
         if (homes == null) return new ArrayList<>();
 
-        return new ArrayList<>(homes.values());
+        return homes.values().stream()
+                .filter(this::isHomeValid)
+                .collect(Collectors.toList());
     }
 
     public int getHomeCount(UUID playerUUID) {

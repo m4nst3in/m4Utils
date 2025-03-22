@@ -12,6 +12,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,22 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
         if (args.length == 0) {
             guiManager.openMainMenu(player);
             return true;
+        }
+
+        if (player.hasPermission("m4utils.home.others") &&
+                args.length == 1 &&
+                !args[0].equalsIgnoreCase("create") &&
+                !args[0].equalsIgnoreCase("delete") &&
+                !args[0].equalsIgnoreCase("tp") &&
+                !args[0].equalsIgnoreCase("list") &&
+                !args[0].equalsIgnoreCase("manage")) {
+
+            Player targetPlayer = plugin.getServer().getPlayer(args[0]);
+            if (targetPlayer != null) {
+                // Show other player's homes
+                showOtherPlayerHomes(player, targetPlayer);
+                return true;
+            }
         }
 
         switch (args[0].toLowerCase()) {
@@ -98,6 +115,27 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
         }
 
         return true;
+    }
+
+    private void showOtherPlayerHomes(Player viewer, Player targetPlayer) {
+        List<Home> homes = homeManager.getPlayerHomes(targetPlayer.getUniqueId());
+
+        if (homes.isEmpty()) {
+            viewer.sendMessage(Main.colorize("&cO jogador &e" + targetPlayer.getName() +
+                    " &cnão possui nenhuma home."));
+            return;
+        }
+
+        viewer.sendMessage(Main.colorize("&aHomes de &e" + targetPlayer.getName() + "&a:"));
+
+        StringBuilder homeList = new StringBuilder();
+        for (int i = 0; i < homes.size(); i++) {
+            homeList.append("&e").append(homes.get(i).getName());
+            if (i < homes.size() - 1) {
+                homeList.append("&a, ");
+            }
+        }
+        viewer.sendMessage(Main.colorize(homeList.toString()));
     }
 
     private void createHome(Player player, String homeName) {
@@ -189,28 +227,60 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
         Player player = (Player) sender;
         List<String> completions = new ArrayList<>();
 
-        if (args.length == 1) {
-            List<String> subCommands = List.of("create", "delete", "tp", "list", "manage");
+        try {
+            if (args.length == 1) {
+                // Adicionar subcomandos básicos primeiro
+                completions.addAll(Arrays.asList("create", "delete", "tp", "list", "manage"));
 
-            completions.addAll(subCommands);
-            completions.addAll(homeManager.getPlayerHomes(player.getUniqueId())
-                    .stream()
-                    .map(Home::getName)
-                    .collect(Collectors.toList()));
+                // Tentar adicionar nomes das homes de forma segura
+                try {
+                    List<Home> homes = homeManager.getPlayerHomes(player.getUniqueId());
+                    for (Home home : homes) {
+                        try {
+                            completions.add(home.getName());
+                        } catch (Exception e) {
+                            plugin.getLogger().warning("Erro ao processar home durante tab completion: " + e.getMessage());
+                        }
+                    }
+                } catch (Exception e) {
+                    plugin.getLogger().warning("Erro ao obter lista de homes durante tab completion: " + e.getMessage());
+                }
 
-        } else if (args.length == 2) {
-            String subCommand = args[0].toLowerCase();
-            if (subCommand.equals("delete") || subCommand.equals("tp") || subCommand.equals("manage")) {
-                completions.addAll(homeManager.getPlayerHomes(player.getUniqueId())
-                        .stream()
-                        .map(Home::getName)
-                        .collect(Collectors.toList()));
+                // Adicionar nomes de jogadores se tiver permissão
+                if (player.hasPermission("m4utils.home.others")) {
+                    completions.addAll(plugin.getServer().getOnlinePlayers().stream()
+                            .map(Player::getName)
+                            .collect(Collectors.toList()));
+                }
+
+            } else if (args.length == 2) {
+                String subCommand = args[0].toLowerCase();
+                if (subCommand.equals("delete") || subCommand.equals("tp") || subCommand.equals("manage")) {
+                    try {
+                        List<Home> homes = homeManager.getPlayerHomes(player.getUniqueId());
+                        for (Home home : homes) {
+                            try {
+                                completions.add(home.getName());
+                            } catch (Exception e) {
+                                plugin.getLogger().warning("Erro ao processar home durante tab completion: " + e.getMessage());
+                            }
+                        }
+                    } catch (Exception e) {
+                        plugin.getLogger().warning("Erro ao obter lista de homes durante tab completion: " + e.getMessage());
+                    }
+                }
             }
-        }
 
-        String currentArg = args[args.length - 1].toLowerCase();
-        return completions.stream()
-                .filter(s -> s.toLowerCase().startsWith(currentArg))
-                .collect(Collectors.toList());
+            // Filtrar as sugestões com base no argumento atual
+            String currentArg = args[args.length - 1].toLowerCase();
+            return completions.stream()
+                    .filter(s -> s.toLowerCase().startsWith(currentArg))
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            plugin.getLogger().severe("Erro durante tab completion: " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 }

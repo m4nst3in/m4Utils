@@ -41,6 +41,12 @@ public class RandomTeleportCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
+        String worldName = player.getWorld().getName();
+
+        if (!worldName.equals("mundo_helix") && !worldName.equals("mundo_chaos")) {
+            player.sendMessage(Main.colorize("&7O comando /rtp só pode ser usado nos mundos: &bHelix e &cChaos&7!"));
+            return true;
+        }
 
         if (cooldowns.containsKey(player.getUniqueId())) {
             long timeRemaining = cooldowns.get(player.getUniqueId()) - System.currentTimeMillis();

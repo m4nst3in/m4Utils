@@ -3,7 +3,6 @@ package me.m4nst3in.m4Utils;
 import me.m4nst3in.m4Utils.commands.*;
 import me.m4nst3in.m4Utils.config.ConfigManager;
 import me.m4nst3in.m4Utils.gui.HomeGUIManager;
-import me.m4nst3in.m4Utils.gui.WarpGUIManager;
 import me.m4nst3in.m4Utils.home.HomeManager;
 import me.m4nst3in.m4Utils.listeners.*;
 import me.m4nst3in.m4Utils.placeholders.PrefixExpansion;
@@ -12,7 +11,6 @@ import me.m4nst3in.m4Utils.util.AFKManager;
 import me.m4nst3in.m4Utils.util.CombatTracker;
 import me.m4nst3in.m4Utils.util.CustomCraftingManager;
 import me.m4nst3in.m4Utils.util.TeleportManager;
-import me.m4nst3in.m4Utils.warp.WarpManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -24,7 +22,6 @@ public final class Main extends JavaPlugin {
     private static Main instance;
     private HomeManager homeManager;
     private AFKManager afkManager;
-    private WarpManager warpManager;
     private PrefixManager prefixManager;
     private TeleportManager teleportManager;
 
@@ -58,21 +55,15 @@ public final class Main extends JavaPlugin {
         CombatTracker combatTracker = new CombatTracker(this);
         homeManager = new HomeManager(this);
         afkManager = new AFKManager(this);
-        warpManager = new WarpManager(this);
 
-        WarpChatListener warpChatListener = new WarpChatListener(this, warpManager);
 
         HomeGUIManager homeGUIManager = new HomeGUIManager(this, homeManager);
-        WarpGUIManager warpGUIManager = new WarpGUIManager(this, warpManager);
         teleportManager = new TeleportManager(this);
-        warpGUIManager.setChatListener(warpChatListener);
 
         getServer().getPluginManager().registerEvents(new MOTDManager(this, configManager), this);
         getServer().getPluginManager().registerEvents(new JoinTitleManager(this), this);
         getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);
         getServer().getPluginManager().registerEvents(new AFKListener(afkManager), this);
-        getServer().getPluginManager().registerEvents(warpChatListener, this);
-        getServer().getPluginManager().registerEvents(new WarpMenuListener(this, warpManager, warpGUIManager), this);
         getServer().getPluginManager().registerEvents(new Listener() {}, this);
         getServer().getPluginManager().registerEvents(new GodModeListener(), this);
         getServer().getPluginManager().registerEvents(new VanishListener(this), this);
@@ -81,15 +72,13 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CustomMessagesListener(this), this);
         getServer().getPluginManager().registerEvents(new AdvancementHideListener(this), this);
         getServer().getPluginManager().registerEvents(new CommandBlockerListener(this), this);
-        getServer().getPluginManager().registerEvents(new ItemStackerListener(this), this);
 
         getCommand("m4reload").setExecutor(new ReloadCommand(this, configManager));
         getCommand("spawn").setExecutor(new SpawnCommand(this, combatTracker));
         getCommand("modo").setExecutor(new ModoCommand(this));
         getCommand("rtp").setExecutor(new RandomTeleportCommand(this));
         getCommand("home").setExecutor(new HomeCommand(this, homeManager, homeGUIManager, combatTracker));
-        getCommand("afk").setExecutor(new AFKCommand(afkManager));
-        getCommand("warp").setExecutor(new WarpCommand(this, warpManager, warpGUIManager));
+        getCommand("afk").setExecutor(new AFKCommand(this, afkManager));
         getCommand("setspawn").setExecutor(new SetSpawnCommand(this));
         getCommand("tp").setExecutor(new TeleportCommand(this));
         getCommand("tpa").setExecutor(new TPACommand(this, teleportManager, combatTracker));
@@ -122,14 +111,15 @@ public final class Main extends JavaPlugin {
         if (homeManager != null) {
             homeManager.saveHomes();
         }
-        if (warpManager != null) {
-            warpManager.saveWarps();
-        }
         if (prefixManager != null) {
             prefixManager.disable();
         }
 
         getLogger().info("M4Utils plugin disabled.");
+    }
+
+    public AFKManager getAFKManager() {
+        return afkManager;
     }
 
     public static String colorize(String message) {

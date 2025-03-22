@@ -1,6 +1,7 @@
 package me.m4nst3in.m4Utils.util;
 
 import me.m4nst3in.m4Utils.Main;
+import me.m4nst3in.m4Utils.events.AFKStatusChangeEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Sound;
@@ -14,13 +15,41 @@ import java.util.UUID;
 public class AFKManager {
     private final Main plugin;
     private final Map<UUID, Boolean> afkPlayers = new HashMap<>();
+    private final Map<UUID, Long> lastActivity = new HashMap<>();
+    private final long afkThreshold;
 
     public AFKManager(Main plugin) {
         this.plugin = plugin;
+        this.afkThreshold = plugin.getConfig().getLong("afk.threshold", 300) * 1000; // Converte para milissegundos
+        startAfkChecker();
+    }
+
+    public void updateActivity(Player player) {
+        lastActivity.put(player.getUniqueId(), System.currentTimeMillis());
+        if (isAFK(player)) {
+            setAFK(player, false);
+        }
+    }
+
+    private void startAfkChecker() {
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
+            long now = System.currentTimeMillis();
+            for (Player player : plugin.getServer().getOnlinePlayers()) {
+                UUID uuid = player.getUniqueId();
+                long lastActive = lastActivity.getOrDefault(uuid, now);
+                if (now - lastActive > afkThreshold && !isAFK(player)) {
+                    setAFK(player, true);
+                }
+            }
+        }, 20L, 20L);
     }
 
     public void setAFK(Player player, boolean afk) {
         UUID playerId = player.getUniqueId();
+        if (afkPlayers.getOrDefault(playerId, false) != afk) {
+            afkPlayers.put(playerId, afk);
+            plugin.getServer().getPluginManager().callEvent(new AFKStatusChangeEvent(player, afk));
+        }
 
         if (afkPlayers.containsKey(playerId) && afkPlayers.get(playerId) == afk) {
             return;

@@ -31,15 +31,11 @@ commands:
     description: Gerencia suas homes (criar, listar, teleportar)
     usage: /home [create|delete|tp|list|manage] [nome]
     permission: m4utils.home
-    aliases: [homes, h]
+    aliases: [homes, h, sethome, setarhome]
   afk:
     description: Ativa/desativa o modo afk.
     usage: /afk
     permission: m4utils.afk
-  warp:
-    description: Permite teletransportar para locais comuns do servidor.
-    usage: /warp
-    permission: m4utils.warp
   scoreboard:
     description: Gerencia o sistema de scoreboard
     aliases: [sb]

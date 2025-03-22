@@ -118,9 +118,9 @@ public class HomeGUIManager implements Listener {
             // Criar item para a home
             Material material;
             // Escolhe material baseado no mundo
-            if (worldName.equalsIgnoreCase("world_nether")) {
+            if (worldName.equalsIgnoreCase("mundo_nether")) {
                 material = Material.NETHERRACK;
-            } else if (worldName.equalsIgnoreCase("world_the_end")) {
+            } else if (worldName.equalsIgnoreCase("mundo_end")) {
                 material = Material.END_STONE;
             } else {
                 material = Material.GRASS_BLOCK;
@@ -162,10 +162,10 @@ public class HomeGUIManager implements Listener {
             case "world":
                 formattedWorld = "§aMundo Principal";
                 break;
-            case "world_nether":
+            case "mundo_nether":
                 formattedWorld = "§cNether";
                 break;
-            case "world_the_end":
+            case "mundo_end":
                 formattedWorld = "§5End";
                 break;
             default:

@@ -8,8 +8,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CustomCraftingManager {
     private final Main plugin;
+    private final Map<String, Material> mobMaterials = new HashMap<>();
 
     public CustomCraftingManager(Main plugin) {
         this.plugin = plugin;
@@ -19,7 +23,6 @@ public class CustomCraftingManager {
         registerEnchantedGoldenAppleRecipe();
         registerTotemRecipe();
         registerTridentRecipe();
-        registerSpawnerRecipe();
 
         plugin.getLogger().info("Custom crafting recipes registered!");
     }
@@ -58,22 +61,6 @@ public class CustomCraftingManager {
         recipe.shape("PPP", "PDP", "PPP");
         recipe.setIngredient('P', Material.PRISMARINE_SHARD);
         recipe.setIngredient('D', Material.DIAMOND);
-
-        Bukkit.addRecipe(recipe);
-    }
-
-    private void registerSpawnerRecipe() {
-        ItemStack spawner = new ItemStack(Material.SPAWNER);
-        ItemMeta meta = spawner.getItemMeta();
-        meta.setDisplayName(Main.colorize("&eSpawner Vazio"));
-        spawner.setItemMeta(meta);
-
-        NamespacedKey key = new NamespacedKey(plugin, "mob_spawner");
-
-        ShapedRecipe recipe = new ShapedRecipe(key, spawner);
-        recipe.shape("III", "INI", "III");
-        recipe.setIngredient('I', Material.IRON_BARS);
-        recipe.setIngredient('N', Material.NETHER_STAR);
 
         Bukkit.addRecipe(recipe);
     }
